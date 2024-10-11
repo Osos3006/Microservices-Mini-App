@@ -5,11 +5,14 @@ const axios = require('axios');
 const app = express();
 app.use(bodyParser.json());
 
+const events = []
+
 
 
 app.post('/events', async (req, res) => {
 
     const event = req.body;
+    events.push(event);
 
 
     axios.post("http://localhost:4000/events", event).catch((err) => {
@@ -32,6 +35,10 @@ app.post('/events', async (req, res) => {
 
 
 
+});
+
+app.get('/events', (req, res) => {
+    res.send(events);
 });
 
 app.listen(4005, () => console.log("Listening on 4005"));
