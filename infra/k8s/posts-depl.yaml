@@ -1,0 +1,32 @@
+apiVersion: apps/v1 # where does the object type live in the k8s api bucket? 
+kind: Deployment 
+metadata: 
+  name: posts-depl 
+spec:
+  replicas: 1 # number of pods ruunning a specific image
+  selector: # tells the deployment which pods it should manage 
+    matchLabels:
+      app: posts 
+  template: # config of a pod
+    metadata:
+      labels:
+        app: posts
+    spec: 
+      containers: # array 
+        - name: posts 
+          image: osos3006/posts
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: posts-clusterip-srv # service name 
+spec:
+  type: ClusterIP # service type , if not specified it will default to ClusterIP 
+  selector:
+    app: posts # which pods to expose? 
+  ports: 
+    - name: posts
+      protocol: TCP
+      port: 4000 # port on the port service that is externally exposed 
+      targetPort: 4000 # actual port that the pod is listening to traffic on

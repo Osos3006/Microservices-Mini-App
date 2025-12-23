@@ -1,0 +1,33 @@
+apiVersion: apps/v1 # where does the object type live in the k8s api bucket? 
+kind: Deployment 
+metadata: 
+  name: moderation-depl 
+spec:
+  replicas: 1 # number of pods ruunning a specific image
+  selector: # tells the deployment which pods it should manage 
+    matchLabels:
+      app: moderation
+  template: # config of a pod
+    metadata:
+      labels:
+        app: moderation
+    spec: 
+      containers: # array 
+        - name: moderation 
+          image: osos3006/moderation
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moderation-srv # service name 
+spec:
+  type: ClusterIP # service type , if not specified it will default to ClusterIP 
+  selector:
+    app: moderation # which pods to expose? 
+  ports: 
+    - name: moderation
+      protocol: TCP
+      port: 4003 # port on the port service that is externally exposed 
+      targetPort: 4003 # actual port that the pod is listening to traffic on
+

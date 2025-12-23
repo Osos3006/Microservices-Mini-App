@@ -9,13 +9,13 @@ export default ({ postId }) => {
 
         event.preventDefault();
 
-        await axios.post(`http://localhost:4001/posts/${postId}/comments`,
+        await axios.post(`/posts/${postId}/comments`,
             {
                 content
             });
 
         setContent('');
-        ``
+        
     };
 
 

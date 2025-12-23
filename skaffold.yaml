@@ -1,0 +1,60 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/* # tells skaffold about the config files intended for k8s 
+
+build:
+  local:
+    push: false # don't push to dockerhub always
+    useBuildkit: true
+  artifacts:
+    - image: osos3006/client
+      context: client # tells skaffold to maintain the js code and update the pods with the changes in these files 
+      docker:
+        dockerfile: Dockerfile # any other file changes require an image rebuild 
+      sync:
+        manual:
+          - src: 'src/**/*.js' # those are copied directly to the image
+            dest: .
+    - image: osos3006/comments
+      context: comments # tells skaffold to maintain the js code and update the pods with the changes in these files 
+      docker:
+        dockerfile: Dockerfile # any other file changes require an image rebuild 
+      sync:
+        manual:
+          - src: '*.js' # those are copied directly to the image
+            dest: .
+    - image: osos3006/posts
+      context: posts # tells skaffold to maintain the js code and update the pods with the changes in these files 
+      docker:
+        dockerfile: Dockerfile # any other file changes require an image rebuild 
+      sync:
+        manual:
+          - src: '*.js' # those are copied directly to the image
+            dest: .
+    - image: osos3006/event-bus
+      context: event-bus # tells skaffold to maintain the js code and update the pods with the changes in these files 
+      docker:
+        dockerfile: Dockerfile # any other file changes require an image rebuild 
+      sync:
+        manual:
+          - src: '*.js' # those are copied directly to the image
+            dest: .
+    - image: osos3006/moderation
+      context: moderation # tells skaffold to maintain the js code and update the pods with the changes in these files 
+      docker:
+        dockerfile: Dockerfile # any other file changes require an image rebuild 
+      sync:
+        manual:
+          - src: '*.js' # those are copied directly to the image
+            dest: .
+    - image: osos3006/query
+      context: query # tells skaffold to maintain the js code and update the pods with the changes in these files 
+      docker:
+        dockerfile: Dockerfile # any other file changes require an image rebuild 
+      sync:
+        manual:
+          - src: '*.js' # those are copied directly to the image
+            dest: .

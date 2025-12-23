@@ -1,0 +1,33 @@
+apiVersion: apps/v1 # where does the object type live in the k8s api bucket? 
+kind: Deployment 
+metadata: 
+  name: query-depl 
+spec:
+  replicas: 1 # number of pods ruunning a specific image
+  selector: # tells the deployment which pods it should manage 
+    matchLabels:
+      app: query
+  template: # config of a pod
+    metadata:
+      labels:
+        app: query
+    spec: 
+      containers: # array 
+        - name: query 
+          image: osos3006/query
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: query-srv # service name 
+spec:
+  type: ClusterIP # service type , if not specified it will default to ClusterIP 
+  selector:
+    app: query # which pods to expose? 
+  ports: 
+    - name: query
+      protocol: TCP
+      port: 4002 # port on the port service that is externally exposed 
+      targetPort: 4002 # actual port that the pod is listening to traffic on
+

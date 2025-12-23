@@ -1,0 +1,33 @@
+apiVersion: apps/v1 # where does the object type live in the k8s api bucket? 
+kind: Deployment 
+metadata: 
+  name: client-depl 
+spec:
+  replicas: 1 # number of pods ruunning a specific image
+  selector: # tells the deployment which pods it should manage 
+    matchLabels:
+      app: client
+  template: # config of a pod
+    metadata:
+      labels:
+        app: client
+    spec: 
+      containers: # array 
+        - name: client 
+          image: osos3006/client
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-srv # service name 
+spec:
+  type: ClusterIP # service type , if not specified it will default to ClusterIP 
+  selector:
+    app: client # which pods to expose? 
+  ports: 
+    - name: client
+      protocol: TCP
+      port: 3000 # port on the port service that is externally exposed 
+      targetPort: 3000 # actual port that the pod is listening to traffic on
+

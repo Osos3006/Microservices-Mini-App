@@ -1,0 +1,33 @@
+apiVersion: apps/v1 # where does the object type live in the k8s api bucket? 
+kind: Deployment 
+metadata: 
+  name: event-bus-depl 
+spec:
+  replicas: 1 # number of pods ruunning a specific image
+  selector: # tells the deployment which pods it should manage 
+    matchLabels:
+      app: event-bus 
+  template: # config of a pod
+    metadata:
+      labels:
+        app: event-bus
+    spec: 
+      containers: # array 
+        - name: event-bus 
+          image: osos3006/event-bus
+          
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-bus-srv # service name 
+spec:
+  type: ClusterIP # service type , if not specified it will default to ClusterIP 
+  selector:
+    app: event-bus # which pods to expose? 
+  ports: 
+    - name: event-bus
+      protocol: TCP
+      port: 4005 # port on the port service that is externally exposed 
+      targetPort: 4005 # actual port that the pod is listening to traffic on
+
